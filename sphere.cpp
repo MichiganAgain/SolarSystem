@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 #include <cmath>
 
 #include "sphere.hpp"
@@ -21,13 +22,16 @@ void SphereVertexModel::initVertices() {
     constexpr float sectorAngleStep = (2 * M_PI) / float(sectors);
 
     int stack, sector;
+    float stackAngle, sectorAngle;
     float x, y, z, cosOfStackAngle;
     for (stack = 0; stack <= stacks; stack++) {
-        y = radius * std::sin((M_PI / 2) - (stack * stackAngleStep));
-        cosOfStackAngle = std::cos(stack * stackAngleStep);
+        stackAngle = (M_PI / 2) - (stack * stackAngleStep);
+        y = radius * std::sin(stackAngle);
+        cosOfStackAngle = std::cos(stackAngle);
         for (sector = 0; sector <= sectors; sector++) {
-            x = radius * cosOfStackAngle * std::cos(sector * sectorAngleStep);
-            z = radius * cosOfStackAngle * std::sin(sector * sectorAngleStep);
+            sectorAngle = sector * sectorAngleStep;
+            x = radius * cosOfStackAngle * std::cos(sectorAngle);
+            z = radius * cosOfStackAngle * std::sin(sectorAngle);
             vertices.push_back(x);
             vertices.push_back(y);
             vertices.push_back(z);
@@ -40,8 +44,8 @@ void SphereVertexModel::initVertices() {
 void SphereVertexModel::initIndices() {
     int k1, k2;
     for (int stack = 0; stack < stacks; stack++) {
-        k1 = stack * sectors;
-        k2 = k1 + sectors;
+        k1 = stack * (sectors + 1);
+        k2 = k1 + sectors + 1;
         for (int sector = 0; sector < sectors; sector++, k1++, k2++) {
             if (stack != 0) {
                 indices.push_back(k1);
@@ -91,5 +95,7 @@ void Sphere::update() {
 
 void Sphere::render() {
     glBindVertexArray(model->vertexArrayObjectID);
+    glBindBuffer(GL_ARRAY_BUFFER, model->vertexBufferObjectID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->elementBufferObjectID);
     glDrawElements(GL_TRIANGLES, model->indices.size(), GL_UNSIGNED_INT, 0);
 }

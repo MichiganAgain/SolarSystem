@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "sphere.hpp"
+#include "shader.hpp"
 
 class Game {
 public:
@@ -12,9 +13,10 @@ public:
 
 private:
     void initWindow();
+    void initShaders();
     void initGameObjects();
     void mainloop();
-    void processInput();
+    void processInput(GLFWwindow* window);
     void cleanup();
 
     GLFWwindow* window;
@@ -22,6 +24,7 @@ private:
     int WINDOW_HEIGHT = 1000;
     const char* windowName = "Solar System";
 
+    Shader* lightingShader;
     std::vector<Sphere*> spheres;
 };
 

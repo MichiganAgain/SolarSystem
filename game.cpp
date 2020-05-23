@@ -1,11 +1,13 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <iostream>
 #include <stdexcept>
 
 #include "game.hpp"
 
 void Game::run() {
     initWindow();
+    initShaders();
     initGameObjects();
     mainloop();
     cleanup();
@@ -32,19 +34,25 @@ void Game::initWindow() {
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
+void Game::initShaders() {
+    lightingShader = new Shader("resources/shaders/lightingVertex.shader", "resources/shaders/lightingFragment.shader");
+}
+
 void Game::initGameObjects() {
-    spheres.push_back(new Sphere({0.0f, 0.0f, 5.0f}));
+    spheres.push_back(new Sphere({0.0f, 0.0f, 0.0f}));
 }
 
 void Game::mainloop() {
     while (!glfwWindowShouldClose(window)) {
         glClearColor(0.1875f, 0.1875f, 0.1875f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        processInput();
+        processInput(window);
 
+        lightingShader->use();
         for (Sphere* sphere : spheres) {
             sphere->update();
+            lightingShader->setMat4("modelMatrix", sphere->modelMatrix);
             sphere->render();
         }
 
@@ -53,8 +61,8 @@ void Game::mainloop() {
     }
 }
 
-void Game::processInput() {
-    
+void Game::processInput(GLFWwindow* window) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) glfwSetWindowShouldClose(window, GLFW_TRUE);
 }
 
 void Game::cleanup() {
