@@ -6,6 +6,7 @@
 
 void Game::run() {
     initWindow();
+    initGameObjects();
     mainloop();
     cleanup();
 }
@@ -31,12 +32,21 @@ void Game::initWindow() {
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
+void Game::initGameObjects() {
+    spheres.push_back(new Sphere({0.0f, 0.0f, 5.0f}));
+}
+
 void Game::mainloop() {
     while (!glfwWindowShouldClose(window)) {
         glClearColor(0.1875f, 0.1875f, 0.1875f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         processInput();
+
+        for (Sphere* sphere : spheres) {
+            sphere->update();
+            sphere->render();
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();
