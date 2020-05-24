@@ -6,12 +6,28 @@
 
 #include "game.hpp"
 
+extern void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+extern void mouse_callback(GLFWwindow* window, double xPos, double yPos);
+extern void scroll_callback(GLFWwindow* window, double xOffset, double yOffset);
+
 void Game::run() {
     initWindow();
     initShaders();
     initGameObjects();
     mainloop();
     cleanup();
+}
+
+void Game::framebuffer_size_callback_handler(GLFWwindow* window, int width, int height) {
+    WINDOW_WIDTH = width;
+    WINDOW_HEIGHT = height;
+    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+}
+void Game::mouse_callback_handler(GLFWwindow* window, double xPos, double yPos) {
+    camera->handleMouse(xPos, yPos, deltaTime);
+}
+void Game::scroll_callback_handler(GLFWwindow* window, double xOffset, double yOffset) {
+
 }
 
 void Game::initWindow() {
@@ -26,12 +42,15 @@ void Game::initWindow() {
         throw std::runtime_error("Failed to create window");
     }
     glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     
     if (glewInit() != GLEW_OK) {
         cleanup();
         throw std::runtime_error("Failed to initialize GLEW");
     }
-    glEnable(GL_DEPTH_TEST);
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
@@ -40,14 +59,20 @@ void Game::initShaders() {
 }
 
 void Game::initGameObjects() {
-    camera = new Camera({-3.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, glm::radians(90.0f), float(WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 10000.0f);
+    camera = new Camera({-3.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, glm::radians(45.0f), float(WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 10000.0f);
     spheres.push_back(new Sphere({0.0f, 0.0f, 0.0f}));
 }
 
 void Game::mainloop() {
+    float currentTime = glfwGetTime();
+    float lastTime = glfwGetTime();
     while (!glfwWindowShouldClose(window)) {
+        currentTime = glfwGetTime();
+        deltaTime = currentTime - lastTime;
+        lastTime = currentTime;
+
         glClearColor(0.1875f, 0.1875f, 0.1875f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT);
 
         processInput(window);
 
@@ -69,6 +94,12 @@ void Game::mainloop() {
 
 void Game::processInput(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) glfwSetWindowShouldClose(window, GLFW_TRUE);
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camera->worldCoord += camera->cameraFrontDirection * deltaTime;
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) camera->worldCoord -= camera->cameraFrontDirection * deltaTime;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) camera->worldCoord -= glm::normalize(glm::cross(camera->cameraFrontDirection, camera->cameraUp)) * deltaTime;
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) camera->worldCoord += glm::normalize(glm::cross(camera->cameraFrontDirection, camera->cameraUp)) * deltaTime;
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) camera->worldCoord += camera->cameraUp * deltaTime;
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) camera->worldCoord -= camera->cameraUp * deltaTime;
 }
 
 void Game::cleanup() {

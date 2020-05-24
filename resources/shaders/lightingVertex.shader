@@ -12,7 +12,7 @@ out vec2 fTexPos;
 out vec3 fNormal;
 
 void main() {
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vPos.x, vPos.y, vPos.z, 1.0f);
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vPos, 1.0f);
     fTexPos = vTexPos;
     fNormal = vNormal;
 }

@@ -11,6 +11,9 @@
 class Game {
 public:
     void run();
+    void framebuffer_size_callback_handler(GLFWwindow* window, int width, int height);
+    void mouse_callback_handler(GLFWwindow* window, double xPos, double yPos);
+    void scroll_callback_handler(GLFWwindow* window, double xOffset, double yOffset);
 
 private:
     void initWindow();
@@ -24,6 +27,7 @@ private:
     int WINDOW_WIDTH = 1000;
     int WINDOW_HEIGHT = 1000;
     const char* windowName = "Solar System";
+    float deltaTime = 0.0f;
 
     Shader* lightingShader;
     Camera* camera;

@@ -28,5 +28,19 @@ void Camera::update() {
     projectionMatrix = glm::perspective(fieldOfView, aspectRatio, minFrustum, maxFrustum);
 }
 
+void Camera::handleMouse(float xPos, float yPos, float deltaTime) {
+    float xOffset = xPos - lastXPos;
+    float yOffset = lastYPos - yPos;
+
+    lastXPos = xPos;
+    lastYPos = yPos;
+
+    pitch += yOffset * lookSensitivity * deltaTime;
+    yaw += xOffset * lookSensitivity * deltaTime;
+
+    if (pitch > 89.0f) pitch = 89.0f;
+    else if (pitch < -89.0f) pitch = -89.0f;
+}
+
 glm::mat4& Camera::getViewMatrix() { return viewMatrix; }
 glm::mat4& Camera::getProjectionMatrix() { return projectionMatrix; }
