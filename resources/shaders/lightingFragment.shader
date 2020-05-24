@@ -12,7 +12,7 @@ in vec3 fNormal;
 out vec4 FragColor;
 
 void main() {
-    float ambientStrength = 0.1f;
+    float ambientStrength = 0.03f;
 
     vec3 normal = normalize(fNormal);
     vec3 lightDir = normalize(lightPos - fPos);

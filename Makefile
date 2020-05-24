@@ -1,4 +1,4 @@
-objects = main.o game.o sphere.o shader.o fileManager.o camera.o shape.o textures.o cube.o lightSource.o
+objects = main.o game.o sphere.o shader.o fileManager.o camera.o shape.o textures.o cube.o lightSource.o physics.o
 
 main: $(objects)
 	g++ --std=c++17 -o main $(objects) -lglfw -lGLEW -lGL
@@ -32,6 +32,9 @@ cube.o: cube.cpp cube.hpp shape.hpp shader.hpp textures.hpp
 
 lightSource.o: lightSource.cpp lightSource.hpp shape.hpp cube.hpp sphere.hpp shader.hpp textures.hpp
 	g++ --std=c++17 -c -o lightSource.o lightSource.cpp
+
+physics.o: physics.cpp physics.hpp
+	g++ --std=c++17 -c -o physics.o physics.cpp
 
 clean:
 	rm *.o

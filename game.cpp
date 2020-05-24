@@ -23,6 +23,7 @@ void Game::framebuffer_size_callback_handler(GLFWwindow* window, int width, int 
     WINDOW_WIDTH = width;
     WINDOW_HEIGHT = height;
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    camera->updateCameraAspectRatio(float(WINDOW_WIDTH) / WINDOW_HEIGHT);
 }
 void Game::mouse_callback_handler(GLFWwindow* window, double xPos, double yPos) {
     camera->handleMouse(xPos, yPos, deltaTime);
@@ -62,9 +63,17 @@ void Game::initShaders() {
 }
 
 void Game::initGameObjects() {
-    camera = new Camera({-5.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, glm::radians(90.0f), float(WINDOW_WIDTH) / WINDOW_HEIGHT);
-    spheres.push_back(new Sphere({0.0f, 0.0f, 5.0f}, 1, TEXTURES::EARTH));
-    lightSources.push_back(new LightSource({0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}));
+    camera = new Camera({-200.0f, 0.0f, 200.0f}, {0.0f, 0.0f, 0.0f}, glm::radians(45.0f), float(WINDOW_WIDTH) / WINDOW_HEIGHT);
+    spheres.push_back(new Sphere({0.0f, 0.0f, 150.0f}, 0.24397f, TEXTURES::MERCURY));
+    spheres.push_back(new Sphere({0.0f, 0.0f, 170.0f}, 0.60518f, TEXTURES::VENUS));
+    spheres.push_back(new Sphere({0.0f, 0.0f, 190.0f}, 0.6371f, TEXTURES::EARTH));
+    spheres.push_back(new Sphere({0.0f, 0.0f, 192.0f}, 0.17375f, TEXTURES::MOON));
+    spheres.push_back(new Sphere({0.0f, 0.0f, 210.0f}, 0.33895f, TEXTURES::MARS));
+    spheres.push_back(new Sphere({0.0f, 0.0f, 260.0f}, 6.9911f, TEXTURES::JUPITER));
+    spheres.push_back(new Sphere({0.0f, 0.0f, 300.0f}, 5.8232f, TEXTURES::SATURN));
+    spheres.push_back(new Sphere({0.0f, 0.0f, 330.0f}, 2.5362f, TEXTURES::URANUS));
+    spheres.push_back(new Sphere({0.0f, 0.0f, 360.0f}, 2.4622f, TEXTURES::NEPTUNE));
+    lightSources.push_back(new LightSource({0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, 69.5508f));
 }
 
 void Game::mainloop() {
@@ -79,7 +88,6 @@ void Game::mainloop() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         processInput(window);
-
         lightingShader->use();
         camera->update();
         lightingShader->setVec4("lightColor", lightSources[0]->lightColor);
@@ -115,12 +123,12 @@ void Game::mainloop() {
 
 void Game::processInput(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) glfwSetWindowShouldClose(window, GLFW_TRUE);
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camera->worldCoord += camera->cameraFrontDirection * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) camera->worldCoord -= camera->cameraFrontDirection * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) camera->worldCoord -= glm::normalize(glm::cross(camera->cameraFrontDirection, camera->cameraUp)) * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) camera->worldCoord += glm::normalize(glm::cross(camera->cameraFrontDirection, camera->cameraUp)) * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) camera->worldCoord += camera->cameraUp * deltaTime;
-    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) camera->worldCoord -= camera->cameraUp * deltaTime;
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camera->handleKeyboard(GLFW_KEY_W, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) camera->handleKeyboard(GLFW_KEY_S, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) camera->handleKeyboard(GLFW_KEY_A, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) camera->handleKeyboard(GLFW_KEY_D, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) camera->handleKeyboard(GLFW_KEY_SPACE, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) camera->handleKeyboard(GLFW_KEY_LEFT_CONTROL, deltaTime);
 }
 
 void Game::cleanup() {

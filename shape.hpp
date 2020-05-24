@@ -37,8 +37,11 @@ class Shape {
         glm::vec3 worldCoord;
 
     protected:
-        unsigned int textureID;
         ShapeVertexModel* model;
+        unsigned int textureID;
+        float SIZE;
+        float mass;
+        
 };
 
 #endif

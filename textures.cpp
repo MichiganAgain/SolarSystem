@@ -48,6 +48,34 @@ unsigned int Texture::loadTexture(TEXTURES t) {
             data = stbi_load("resources/textures/moon.jpg", &width, &height, &channelsInFile, 0);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
             break;
+        case TEXTURES::MERCURY:
+            data = stbi_load("resources/textures/mercury.jpg", &width, &height, &channelsInFile, 0);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            break;
+        case TEXTURES::VENUS:
+            data = stbi_load("resources/textures/venus.jpg", &width, &height, &channelsInFile, 0);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            break;
+        case TEXTURES::MARS:
+            data = stbi_load("resources/textures/mars.jpg", &width, &height, &channelsInFile, 0);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            break;
+        case TEXTURES::JUPITER:
+            data = stbi_load("resources/textures/jupiter.jpg", &width, &height, &channelsInFile, 0);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            break;
+        case TEXTURES::SATURN:
+            data = stbi_load("resources/textures/saturn.jpg", &width, &height, &channelsInFile, 0);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            break;
+        case TEXTURES::URANUS:
+            data = stbi_load("resources/textures/uranus.jpg", &width, &height, &channelsInFile, 0);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            break;
+        case TEXTURES::NEPTUNE:
+            data = stbi_load("resources/textures/neptune.jpg", &width, &height, &channelsInFile, 0);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            break;
         default:
             throw std::runtime_error("Failed to find texture");
     }

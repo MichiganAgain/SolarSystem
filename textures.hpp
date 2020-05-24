@@ -3,7 +3,8 @@
 
 #include <unordered_map>
 
-enum class TEXTURES: unsigned int {GRADIENT, EARTH, SUN, MOON};
+enum class TEXTURES: unsigned int {GRADIENT, EARTH, SUN, MOON, MERCURY, VENUS, MARS,
+                                    JUPITER, SATURN, URANUS, NEPTUNE};
 
 class Texture {
     public:

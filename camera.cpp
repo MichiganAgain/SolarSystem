@@ -1,3 +1,4 @@
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <cmath>
@@ -38,6 +39,19 @@ void Camera::handleMouse(float xPos, float yPos, float deltaTime) {
 
     if (pitch > glm::radians(89.0f)) pitch = glm::radians(89.0f);
     else if (pitch < glm::radians(-89.0f)) pitch = glm::radians(-89.0f);
+}
+
+void Camera::handleKeyboard(int KEY, float deltaTime) {
+    if (KEY == GLFW_KEY_W) worldCoord += cameraFrontDirection * movementSpeed * deltaTime;
+    if (KEY == GLFW_KEY_S) worldCoord -= cameraFrontDirection * movementSpeed * deltaTime;
+    if (KEY == GLFW_KEY_A) worldCoord -= glm::normalize(glm::cross(cameraFrontDirection, cameraUp)) * movementSpeed * deltaTime;
+    if (KEY == GLFW_KEY_D) worldCoord += glm::normalize(glm::cross(cameraFrontDirection, cameraUp)) * movementSpeed * deltaTime;
+    if (KEY == GLFW_KEY_SPACE) worldCoord += cameraUp * movementSpeed * deltaTime;
+    if (KEY == GLFW_KEY_LEFT_CONTROL) worldCoord -= cameraUp * movementSpeed * deltaTime;
+}
+
+void Camera::updateCameraAspectRatio(float ar) {
+    this->aspectRatio = ar;
 }
 
 glm::mat4& Camera::getViewMatrix() { return viewMatrix; }

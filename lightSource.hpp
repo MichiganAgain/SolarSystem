@@ -7,12 +7,13 @@
 
 class LightSource {
     public:
-        LightSource(glm::vec3 pos, glm::vec4 lightColor);
+        LightSource(glm::vec3 pos, glm::vec4 lightColor, float SIZE);
         void update();
         void render(Shader* shader);
 
         Shape* shape;
         glm::vec4 lightColor;
+        float SIZE;
 };
 
 #endif

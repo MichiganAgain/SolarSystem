@@ -83,8 +83,9 @@ void CubeVertexModel::initGlObjects() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-Cube::Cube(glm::vec3 pos, TEXTURES t) {
+Cube::Cube(glm::vec3 pos, float SIZE, TEXTURES t) {
     worldCoord = pos;
+    this->SIZE = SIZE;
     model = CubeVertexModel::instance();
     textureID = Texture::getTexture(t);
 }
@@ -92,6 +93,7 @@ Cube::Cube(glm::vec3 pos, TEXTURES t) {
 void Cube::update() {
     modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, worldCoord);
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(SIZE, SIZE, SIZE));
 }
 
 void Cube::render(Shader* shader) {

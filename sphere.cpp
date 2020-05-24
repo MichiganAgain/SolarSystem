@@ -90,16 +90,17 @@ void SphereVertexModel::initGlObjects() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-Sphere::Sphere(glm::vec3 pos, int radius, TEXTURES t): radius{radius} {
+Sphere::Sphere(glm::vec3 pos, float SIZE, TEXTURES t) {
     worldCoord = pos;
+    this->SIZE = SIZE;
     model = SphereVertexModel::instance();
     textureID = Texture::getTexture(t);
 }
 
 void Sphere::update() {
     modelMatrix = glm::mat4(1.0f);
-    modelMatrix = glm::scale(modelMatrix, glm::vec3(radius, radius, radius));
     modelMatrix = glm::translate(modelMatrix, worldCoord);
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(SIZE, SIZE, SIZE));
 }
 
 void Sphere::render(Shader* shader) {

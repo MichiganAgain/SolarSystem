@@ -30,6 +30,7 @@ private:
     int WINDOW_HEIGHT = 1000;
     const char* windowName = "Solar System";
     float deltaTime = 0.0f;
+    const float WORLD_SCALE = 0.0001f;
 
     Shader* lightingShader;
     Shader* lightObjectShader;
