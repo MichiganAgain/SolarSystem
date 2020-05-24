@@ -1,11 +1,13 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <vector>
 #include <stdexcept>
 #include <cmath>
 
 #include "game.hpp"
 #include "textures.hpp"
+#include "physics.hpp"
 
 extern void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 extern void mouse_callback(GLFWwindow* window, double xPos, double yPos);
@@ -29,7 +31,7 @@ void Game::mouse_callback_handler(GLFWwindow* window, double xPos, double yPos) 
     camera->handleMouse(xPos, yPos, deltaTime);
 }
 void Game::scroll_callback_handler(GLFWwindow* window, double xOffset, double yOffset) {
-
+    camera->handleScroll(xOffset, yOffset, deltaTime);
 }
 
 void Game::initWindow() {
@@ -63,17 +65,22 @@ void Game::initShaders() {
 }
 
 void Game::initGameObjects() {
-    camera = new Camera({-200.0f, 0.0f, 200.0f}, {0.0f, 0.0f, 0.0f}, glm::radians(45.0f), float(WINDOW_WIDTH) / WINDOW_HEIGHT);
-    spheres.push_back(new Sphere({0.0f, 0.0f, 150.0f}, 0.24397f, TEXTURES::MERCURY));
-    spheres.push_back(new Sphere({0.0f, 0.0f, 170.0f}, 0.60518f, TEXTURES::VENUS));
-    spheres.push_back(new Sphere({0.0f, 0.0f, 190.0f}, 0.6371f, TEXTURES::EARTH));
-    spheres.push_back(new Sphere({0.0f, 0.0f, 192.0f}, 0.17375f, TEXTURES::MOON));
-    spheres.push_back(new Sphere({0.0f, 0.0f, 210.0f}, 0.33895f, TEXTURES::MARS));
-    spheres.push_back(new Sphere({0.0f, 0.0f, 260.0f}, 6.9911f, TEXTURES::JUPITER));
-    spheres.push_back(new Sphere({0.0f, 0.0f, 300.0f}, 5.8232f, TEXTURES::SATURN));
-    spheres.push_back(new Sphere({0.0f, 0.0f, 330.0f}, 2.5362f, TEXTURES::URANUS));
-    spheres.push_back(new Sphere({0.0f, 0.0f, 360.0f}, 2.4622f, TEXTURES::NEPTUNE));
-    lightSources.push_back(new LightSource({0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, 69.5508f));
+    camera = new Camera({0.0f, 400.0f, 0.0f}, {0.0f, glm::radians(-90.0f), 0.0f}, glm::radians(90.0f), float(WINDOW_WIDTH) / WINDOW_HEIGHT);
+    shapes.push_back(new Sphere({0.0f, 0.0f, 150.0f}, {0.7f, 0.0f, 0.0f}, 0.24397f, 10.0f, TEXTURES::MERCURY));
+    shapes.push_back(new Sphere({0.0f, 0.0f, 170.0f}, {0.7f, 0.0f, 0.0f}, 0.60518f, 10.0f, TEXTURES::VENUS));
+    shapes.push_back(new Sphere({0.0f, 0.0f, 190.0f}, {0.7f, 0.0f, 0.0f}, 0.6371f, 100.0f, TEXTURES::EARTH));
+    shapes.push_back(new Sphere({0.0f, 2.0f, 190.0f}, {0.7f, 0.0f, 0.0f}, 0.17375f, 10.0f, TEXTURES::MOON));
+    shapes.push_back(new Sphere({0.0f, 0.0f, 210.0f}, {0.7f, 0.0f, 0.0f}, 0.33895f, 10.0f, TEXTURES::MARS));
+    shapes.push_back(new Sphere({0.0f, 0.0f, 260.0f}, {0.7f, 0.0f, 0.0f}, 6.9911f, 10.0f, TEXTURES::JUPITER));
+    shapes.push_back(new Sphere({0.0f, 0.0f, 300.0f}, {0.7f, 0.0f, 0.0f}, 5.8232f, 10.0f, TEXTURES::SATURN));
+    shapes.push_back(new Sphere({0.0f, 0.0f, 330.0f}, {0.7f, 0.0f, 0.0f}, 2.5362f, 10.0f, TEXTURES::URANUS));
+    shapes.push_back(new Sphere({0.0f, 0.0f, 360.0f}, {0.7f, 0.0f, 0.0f}, 2.4622f, 10.0f, TEXTURES::NEPTUNE));
+    
+    lightSources.push_back(new LightSource({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, 69.5508f, 10000.0f));
+    
+    for (LightSource* lightSource : lightSources) {
+        if (lightSource->shape) shapes.push_back(lightSource->shape);
+    }
 }
 
 void Game::mainloop() {
@@ -88,6 +95,9 @@ void Game::mainloop() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         processInput(window);
+
+        Physics::gravitationalPull(shapes);
+
         lightingShader->use();
         camera->update();
         lightingShader->setVec4("lightColor", lightSources[0]->lightColor);
@@ -96,15 +106,12 @@ void Game::mainloop() {
         lightingShader->setMat4("viewMatrix", camera->getViewMatrix());
         lightingShader->setMat4("projectionMatrix", camera->getProjectionMatrix());
 
-        for (Sphere* sphere : spheres) {
-            sphere->update();
-            lightingShader->setMat4("modelMatrix", sphere->modelMatrix);
-            sphere->render(lightingShader);
-        }
-        for (Cube* cube : cubes) {
-            cube->update();
-            lightingShader->setMat4("modelMatrix", cube->modelMatrix);
-            cube->render(lightingShader);
+        for (Shape* shape : shapes) {
+            if (!shape->lightSource) {
+                shape->update();
+                lightingShader->setMat4("modelMatrix", shape->modelMatrix);
+                shape->render(lightingShader);
+            }
         }
 
         lightObjectShader->use();
@@ -115,6 +122,7 @@ void Game::mainloop() {
             lightingShader->setMat4("modelMatrix", lightSource->shape->modelMatrix);
             lightSource->render(lightObjectShader);
         }
+        lightSources[0]->shape->worldCoord = glm::vec3(0.0f, 0.0f, 0.0f);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

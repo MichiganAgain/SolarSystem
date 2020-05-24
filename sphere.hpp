@@ -24,11 +24,8 @@ class SphereVertexModel: public ShapeVertexModel {
 
 class Sphere: public Shape {
     public:
-        Sphere(glm::vec3 pos, float SIZE, TEXTURES t);
-        virtual void update() override;
+        Sphere(glm::vec3 pos, glm::vec3 initialVelocity, float SIZE, float mass, TEXTURES t);
         virtual void render(Shader* shader) override;
-
-    private:
 };
 
 #endif

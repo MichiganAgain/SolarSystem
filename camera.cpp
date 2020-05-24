@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <cmath>
+#include <algorithm>
 
 #include "camera.hpp"
 
@@ -39,6 +40,14 @@ void Camera::handleMouse(float xPos, float yPos, float deltaTime) {
 
     if (pitch > glm::radians(89.0f)) pitch = glm::radians(89.0f);
     else if (pitch < glm::radians(-89.0f)) pitch = glm::radians(-89.0f);
+}
+
+void Camera::handleScroll(float xOffset, float yOffset, float deltaTime) {
+    float scrollValue = yOffset * zoomSensitivity * deltaTime;
+    fieldOfView += scrollValue;
+
+    if (fieldOfView > maxZoom) fieldOfView = maxZoom;
+    else if (fieldOfView < minZoom) fieldOfView = minZoom;
 }
 
 void Camera::handleKeyboard(int KEY, float deltaTime) {

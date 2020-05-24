@@ -29,19 +29,30 @@ class ShapeVertexModel {
         std::vector<unsigned int> indices;
 };
 
+struct ShapeState {
+    glm::vec3 velocity;
+    float SIZE;
+    float mass;
+};
+
 class Shape {
     public:
-        virtual void update() = 0;
+        void update();
         virtual void render(Shader* shader) = 0;
+
+        ShapeState* nextState = nullptr;
         glm::mat4 modelMatrix;
         glm::vec3 worldCoord;
+        glm::vec3 velocity;
+        float mass;
+        bool lightSource = false;
 
     protected:
+        void initializeNextState();
+        
         ShapeVertexModel* model;
         unsigned int textureID;
-        float SIZE;
-        float mass;
-        
+        float SIZE;        
 };
 
 #endif

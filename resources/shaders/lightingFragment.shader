@@ -18,7 +18,7 @@ void main() {
     vec3 lightDir = normalize(lightPos - fPos);
     float diffusion = max(dot(normal, lightDir), 0.0f);
 
-    float specularStrength = 0.5f;
+    float specularStrength = 0.1f;
     vec3 viewDirection = normalize(viewPos - fPos);
     vec3 reflectDirection = reflect(-lightDir, normal);
     float specular = pow(max(dot(viewDirection, reflectDirection), 0.0f), 32) * specularStrength;

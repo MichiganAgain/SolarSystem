@@ -36,8 +36,7 @@ private:
     Shader* lightObjectShader;
     
     Camera* camera;
-    std::vector<Sphere*> spheres;
-    std::vector<Cube*> cubes;
+    std::vector<Shape*> shapes;
     std::vector<LightSource*> lightSources;
 };
 

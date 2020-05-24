@@ -20,8 +20,7 @@ class CubeVertexModel: public ShapeVertexModel {
 
 class Cube: public Shape {
     public:
-        Cube(glm::vec3 pos, float SIZE, TEXTURES t);
-        virtual void update() override;
+        Cube(glm::vec3 pos, glm::vec3 initialVelocity, float SIZE, float mass, TEXTURES t);
         virtual void render(Shader* shader) override;
 };
 

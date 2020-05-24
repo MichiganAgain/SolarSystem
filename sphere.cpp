@@ -90,17 +90,15 @@ void SphereVertexModel::initGlObjects() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-Sphere::Sphere(glm::vec3 pos, float SIZE, TEXTURES t) {
+Sphere::Sphere(glm::vec3 pos, glm::vec3 initialVelocity, float SIZE, float mass, TEXTURES t) {
     worldCoord = pos;
+    velocity = initialVelocity;
     this->SIZE = SIZE;
-    model = SphereVertexModel::instance();
+    this->mass = mass;
     textureID = Texture::getTexture(t);
-}
 
-void Sphere::update() {
-    modelMatrix = glm::mat4(1.0f);
-    modelMatrix = glm::translate(modelMatrix, worldCoord);
-    modelMatrix = glm::scale(modelMatrix, glm::vec3(SIZE, SIZE, SIZE));
+    model = SphereVertexModel::instance();
+    initializeNextState();
 }
 
 void Sphere::render(Shader* shader) {

@@ -8,6 +8,7 @@ class Camera {
         Camera(glm::vec3 pos, glm::vec3 orientation, float fov, float aspectRatio);
         void update();
         void handleMouse(float xPos, float yPos, float deltaTime);
+        void handleScroll(float xOffset, float yOffset, float deltaTime);
         void handleKeyboard(int KEY, float deltaTime);
         void updateCameraAspectRatio(float ar);
         glm::mat4& getViewMatrix();
@@ -28,8 +29,11 @@ class Camera {
 
         float roll, pitch, yaw;
         float lastXPos = 0, lastYPos = 0;
-        float lookSensitivity = 0.07f;
-        float movementSpeed = 50;
+        float minZoom = 0.01f;
+        float maxZoom = 90.0f;
+        float lookSensitivity = 0.01f;
+        float zoomSensitivity = 0.05f;
+        float movementSpeed = 200;
 };
 
 #endif
