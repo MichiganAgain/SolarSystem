@@ -18,7 +18,7 @@ class ShapeVertexModel {
     protected:
         virtual void initVertices() = 0;
         virtual void initIndices() = 0;
-        void initGlObjects();
+        virtual void initGlObjects() = 0;
 
         unsigned int vertexArrayObjectID;
         unsigned int vertexBufferObjectID;

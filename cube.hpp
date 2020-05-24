@@ -1,29 +1,25 @@
-#ifndef SPHERE_HPP
-#define SPHERE_HPP
+#ifndef CUBE_HPP
+#define CUBE_HPP
 
 #include <glm/vec3.hpp>
 
 #include "shape.hpp"
 #include "shader.hpp"
 
-class SphereVertexModel: public ShapeVertexModel {
+class CubeVertexModel: public ShapeVertexModel {
     public:
-        static SphereVertexModel* instance();
-        SphereVertexModel();
+        static CubeVertexModel* instance();
+        CubeVertexModel();
 
     private:
         virtual void initVertices() override;
         virtual void initIndices() override;
         virtual void initGlObjects() override;
-
-        static constexpr int stacks = 50;
-        static constexpr int sectors = 100;
-        static constexpr float radius = 1;
 };
 
-class Sphere: public Shape {
+class Cube: public Shape {
     public:
-        Sphere(glm::vec3 pos);
+        Cube(glm::vec3 pos);
         virtual void update() override;
         virtual void render(Shader* shader) override;
 };

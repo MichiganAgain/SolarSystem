@@ -51,6 +51,7 @@ void Game::initWindow() {
         cleanup();
         throw std::runtime_error("Failed to initialize GLEW");
     }
+    glEnable(GL_DEPTH_TEST);
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
@@ -59,8 +60,9 @@ void Game::initShaders() {
 }
 
 void Game::initGameObjects() {
-    camera = new Camera({-3.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, glm::radians(45.0f), float(WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 10000.0f);
-    spheres.push_back(new Sphere({0.0f, 0.0f, 0.0f}));
+    camera = new Camera({-3.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, glm::radians(45.0f), float(WINDOW_WIDTH) / WINDOW_HEIGHT);
+    //spheres.push_back(new Sphere({0.0f, 0.0f, 0.0f}));
+    cubes.push_back(new Cube({0.0f, 0.0f, 0.0f}));
 }
 
 void Game::mainloop() {
@@ -72,7 +74,7 @@ void Game::mainloop() {
         lastTime = currentTime;
 
         glClearColor(0.1875f, 0.1875f, 0.1875f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         processInput(window);
 
@@ -85,6 +87,11 @@ void Game::mainloop() {
             sphere->update();
             lightingShader->setMat4("modelMatrix", sphere->modelMatrix);
             sphere->render(lightingShader);
+        }
+        for (Cube* cube : cubes) {
+            cube->update();
+            lightingShader->setMat4("modelMatrix", cube->modelMatrix);
+            cube->render(lightingShader);
         }
 
         glfwSwapBuffers(window);

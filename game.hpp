@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "sphere.hpp"
+#include "cube.hpp"
 #include "shader.hpp"
 #include "camera.hpp"
 
@@ -32,6 +33,7 @@ private:
     Shader* lightingShader;
     Camera* camera;
     std::vector<Sphere*> spheres;
+    std::vector<Cube*> cubes;
 };
 
 #endif

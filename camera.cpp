@@ -4,15 +4,13 @@
 
 #include "camera.hpp"
 
-Camera::Camera(glm::vec3 pos, glm::vec3 orientation, float fov, float ar, const int minF, const int maxF) {
+Camera::Camera(glm::vec3 pos, glm::vec3 orientation, float fov, float ar) {
     worldCoord = pos;
     roll = orientation.x;
     pitch = orientation.y;
     yaw = orientation.z;
     fieldOfView = fov;
     aspectRatio = ar;
-    minFrustum = minF;
-    maxFrustum = maxF;
 }
 
 void Camera::update() {

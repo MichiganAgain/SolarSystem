@@ -5,7 +5,7 @@
 
 class Camera {
     public:
-        Camera(glm::vec3 pos, glm::vec3 orientation, float fov, float aspectRatio, const int minFrustum, const int maxFrustum);
+        Camera(glm::vec3 pos, glm::vec3 orientation, float fov, float aspectRatio);
         void update();
         void handleMouse(float xPos, float yPos, float deltaTime);
         glm::mat4& getViewMatrix();
@@ -21,8 +21,8 @@ class Camera {
 
         float fieldOfView;
         float aspectRatio;
-        float minFrustum;
-        float maxFrustum;
+        float minFrustum = 0.01f;
+        float maxFrustum = 10000.0f;
 
         float roll, pitch, yaw;
         float lastXPos = 0, lastYPos = 0;
