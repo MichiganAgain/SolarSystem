@@ -1,6 +1,7 @@
 #version 330 core
 
 in vec2 fTexPos;
+in vec3 fNormal;
 out vec4 FragColor;
 
 void main() {

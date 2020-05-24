@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <stdexcept>
+#include <cmath>
 
 #include "game.hpp"
 
@@ -39,6 +40,7 @@ void Game::initShaders() {
 }
 
 void Game::initGameObjects() {
+    camera = new Camera({-3.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, glm::radians(90.0f), float(WINDOW_WIDTH) / WINDOW_HEIGHT, 0.1f, 10000.0f);
     spheres.push_back(new Sphere({0.0f, 0.0f, 0.0f}));
 }
 
@@ -50,6 +52,10 @@ void Game::mainloop() {
         processInput(window);
 
         lightingShader->use();
+        camera->update();
+        lightingShader->setMat4("viewMatrix", camera->getViewMatrix());
+        lightingShader->setMat4("projectionMatrix", camera->getProjectionMatrix());
+
         for (Sphere* sphere : spheres) {
             sphere->update();
             lightingShader->setMat4("modelMatrix", sphere->modelMatrix);

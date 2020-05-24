@@ -6,6 +6,7 @@
 
 #include "sphere.hpp"
 #include "shader.hpp"
+#include "camera.hpp"
 
 class Game {
 public:
@@ -25,6 +26,7 @@ private:
     const char* windowName = "Solar System";
 
     Shader* lightingShader;
+    Camera* camera;
     std::vector<Sphere*> spheres;
 };
 

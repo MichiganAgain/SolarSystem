@@ -15,8 +15,8 @@ class SphereVertexModel: public ShapeVertexModel {
         virtual void initVertices() override;
         virtual void initIndices() override;
 
-        static constexpr int stacks = 10;
-        static constexpr int sectors = 20;
+        static constexpr int stacks = 50;
+        static constexpr int sectors = 100;
         static constexpr float radius = 1;
 };
 

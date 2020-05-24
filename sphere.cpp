@@ -37,6 +37,9 @@ void SphereVertexModel::initVertices() {
             vertices.push_back(z);
             vertices.push_back(float(sector) / sectors);
             vertices.push_back(float(stack) / stacks);
+            vertices.push_back(x);
+            vertices.push_back(y);
+            vertices.push_back(z);
         }
     }
 }
@@ -71,12 +74,14 @@ void SphereVertexModel::initGlObjects() {
 
     glGenBuffers(1, &elementBufferObjectID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferObjectID);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), &indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*) 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) 0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -94,8 +99,8 @@ void Sphere::update() {
 }
 
 void Sphere::render() {
-    glBindVertexArray(model->vertexArrayObjectID);
-    glBindBuffer(GL_ARRAY_BUFFER, model->vertexBufferObjectID);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->elementBufferObjectID);
-    glDrawElements(GL_TRIANGLES, model->indices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(model->getVertexArrayID());
+    glBindBuffer(GL_ARRAY_BUFFER, model->getVertexBufferID());
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->getElementBufferID());
+    glDrawElements(GL_TRIANGLES, model->getIndices().size(), GL_UNSIGNED_INT, 0);
 }
