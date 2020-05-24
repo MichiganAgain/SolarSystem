@@ -38,8 +38,8 @@ void Camera::handleMouse(float xPos, float yPos, float deltaTime) {
     pitch += yOffset * lookSensitivity * deltaTime;
     yaw += xOffset * lookSensitivity * deltaTime;
 
-    if (pitch > 89.0f) pitch = 89.0f;
-    else if (pitch < -89.0f) pitch = -89.0f;
+    if (pitch > glm::radians(89.0f)) pitch = glm::radians(89.0f);
+    else if (pitch < glm::radians(-89.0f)) pitch = glm::radians(-89.0f);
 }
 
 glm::mat4& Camera::getViewMatrix() { return viewMatrix; }

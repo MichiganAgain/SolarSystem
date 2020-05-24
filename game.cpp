@@ -84,7 +84,7 @@ void Game::mainloop() {
         for (Sphere* sphere : spheres) {
             sphere->update();
             lightingShader->setMat4("modelMatrix", sphere->modelMatrix);
-            sphere->render();
+            sphere->render(lightingShader);
         }
 
         glfwSwapBuffers(window);

@@ -5,6 +5,8 @@
 #include <cmath>
 
 #include "sphere.hpp"
+#include "textures.hpp"
+#include "shader.hpp"
 
 SphereVertexModel* SphereVertexModel::instance() {
     static SphereVertexModel ssvm = SphereVertexModel();
@@ -32,14 +34,14 @@ void SphereVertexModel::initVertices() {
             sectorAngle = sector * sectorAngleStep;
             x = radius * cosOfStackAngle * std::cos(sectorAngle);
             z = radius * cosOfStackAngle * std::sin(sectorAngle);
-            vertices.push_back(x);
+            vertices.push_back(x);  // position
             vertices.push_back(y);
             vertices.push_back(z);
-            vertices.push_back(float(sector) / sectors);
+            vertices.push_back(float(sector) / sectors);    // texture coord
             vertices.push_back(float(stack) / stacks);
-            vertices.push_back(x);
-            vertices.push_back(y);
-            vertices.push_back(z);
+            vertices.push_back(x);  // surface normal
+            vertices.push_back(y);  // x y z as unit sphere already
+            vertices.push_back(z);  // instead of * by inverse of radius
         }
     }
 }
@@ -64,33 +66,10 @@ void SphereVertexModel::initIndices() {
     }
 }
 
-void SphereVertexModel::initGlObjects() {
-    glGenVertexArrays(1, &vertexArrayObjectID);
-    glBindVertexArray(vertexArrayObjectID);
-
-    glGenBuffers(1, &vertexBufferObjectID);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjectID);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
-
-    glGenBuffers(1, &elementBufferObjectID);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferObjectID);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) 0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
 Sphere::Sphere(glm::vec3 pos) {
     worldCoord = pos;
     model = SphereVertexModel::instance();
+    textureID = Texture::getTexture(TEXTURES::GRADIENT);
 }
 
 void Sphere::update() {
@@ -98,7 +77,12 @@ void Sphere::update() {
     modelMatrix = glm::translate(modelMatrix, worldCoord);
 }
 
-void Sphere::render() {
+void Sphere::render(Shader* shader) {
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    shader->setInt("texture0", 0);
+
     glBindVertexArray(model->getVertexArrayID());
     glBindBuffer(GL_ARRAY_BUFFER, model->getVertexBufferID());
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->getElementBufferID());

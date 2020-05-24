@@ -4,6 +4,7 @@
 #include <glm/vec3.hpp>
 
 #include "shape.hpp"
+#include "shader.hpp"
 
 class SphereVertexModel: public ShapeVertexModel {
     public:
@@ -11,7 +12,6 @@ class SphereVertexModel: public ShapeVertexModel {
         SphereVertexModel();
 
     private:
-        virtual void initGlObjects() override;
         virtual void initVertices() override;
         virtual void initIndices() override;
 
@@ -24,7 +24,7 @@ class Sphere: public Shape {
     public:
         Sphere(glm::vec3 pos);
         virtual void update() override;
-        virtual void render() override;
+        virtual void render(Shader* shader) override;
 };
 
 #endif
