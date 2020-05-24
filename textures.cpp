@@ -36,6 +36,18 @@ unsigned int Texture::loadTexture(TEXTURES t) {
             data = stbi_load("resources/textures/grayGradient.jpeg", &width, &height, &channelsInFile, 0);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
             break;
+        case TEXTURES::EARTH:
+            data = stbi_load("resources/textures/earth.png", &width, &height, &channelsInFile, 0);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            break;
+        case TEXTURES::SUN:
+            data = stbi_load("resources/textures/sun.jpg", &width, &height, &channelsInFile, 0);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            break;
+        case TEXTURES::MOON:
+            data = stbi_load("resources/textures/moon.jpg", &width, &height, &channelsInFile, 0);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            break;
         default:
             throw std::runtime_error("Failed to find texture");
     }

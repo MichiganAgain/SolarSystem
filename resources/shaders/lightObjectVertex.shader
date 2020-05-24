@@ -8,14 +8,11 @@ uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 
-out vec3 fPos;
 out vec2 fTexPos;
 out vec3 fNormal;
 
 void main() {
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vPos, 1.0f);
-
-    fPos = vec3(modelMatrix * vec4(vPos, 1.0f));
     fTexPos = vTexPos;
-    fNormal = mat3(transpose(inverse(modelMatrix))) * vNormal;
+    fNormal = vNormal;
 }

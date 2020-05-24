@@ -5,6 +5,7 @@
 
 #include "shape.hpp"
 #include "shader.hpp"
+#include "textures.hpp"
 
 class CubeVertexModel: public ShapeVertexModel {
     public:
@@ -19,7 +20,7 @@ class CubeVertexModel: public ShapeVertexModel {
 
 class Cube: public Shape {
     public:
-        Cube(glm::vec3 pos);
+        Cube(glm::vec3 pos, TEXTURES t);
         virtual void update() override;
         virtual void render(Shader* shader) override;
 };

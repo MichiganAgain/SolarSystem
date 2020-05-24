@@ -5,6 +5,7 @@
 
 #include "shape.hpp"
 #include "shader.hpp"
+#include "textures.hpp"
 
 class SphereVertexModel: public ShapeVertexModel {
     public:
@@ -23,9 +24,12 @@ class SphereVertexModel: public ShapeVertexModel {
 
 class Sphere: public Shape {
     public:
-        Sphere(glm::vec3 pos);
+        Sphere(glm::vec3 pos, int radius, TEXTURES t);
         virtual void update() override;
         virtual void render(Shader* shader) override;
+
+    private:
+        int radius;
 };
 
 #endif

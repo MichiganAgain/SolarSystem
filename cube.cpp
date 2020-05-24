@@ -83,10 +83,10 @@ void CubeVertexModel::initGlObjects() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-Cube::Cube(glm::vec3 pos) {
+Cube::Cube(glm::vec3 pos, TEXTURES t) {
     worldCoord = pos;
     model = CubeVertexModel::instance();
-    textureID = Texture::getTexture(TEXTURES::GRADIENT);
+    textureID = Texture::getTexture(t);
 }
 
 void Cube::update() {

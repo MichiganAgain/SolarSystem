@@ -8,6 +8,7 @@
 #include "cube.hpp"
 #include "shader.hpp"
 #include "camera.hpp"
+#include "lightSource.hpp"
 
 class Game {
 public:
@@ -31,9 +32,12 @@ private:
     float deltaTime = 0.0f;
 
     Shader* lightingShader;
+    Shader* lightObjectShader;
+    
     Camera* camera;
     std::vector<Sphere*> spheres;
     std::vector<Cube*> cubes;
+    std::vector<LightSource*> lightSources;
 };
 
 #endif

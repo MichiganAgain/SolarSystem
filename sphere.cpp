@@ -90,14 +90,15 @@ void SphereVertexModel::initGlObjects() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-Sphere::Sphere(glm::vec3 pos) {
+Sphere::Sphere(glm::vec3 pos, int radius, TEXTURES t): radius{radius} {
     worldCoord = pos;
     model = SphereVertexModel::instance();
-    textureID = Texture::getTexture(TEXTURES::GRADIENT);
+    textureID = Texture::getTexture(t);
 }
 
 void Sphere::update() {
     modelMatrix = glm::mat4(1.0f);
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(radius, radius, radius));
     modelMatrix = glm::translate(modelMatrix, worldCoord);
 }
 

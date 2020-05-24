@@ -5,6 +5,7 @@
 #include <cmath>
 
 #include "game.hpp"
+#include "textures.hpp"
 
 extern void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 extern void mouse_callback(GLFWwindow* window, double xPos, double yPos);
@@ -57,17 +58,18 @@ void Game::initWindow() {
 
 void Game::initShaders() {
     lightingShader = new Shader("resources/shaders/lightingVertex.shader", "resources/shaders/lightingFragment.shader");
+    lightObjectShader = new Shader("resources/shaders/lightObjectVertex.shader", "resources/shaders/lightObjectFragment.shader");
 }
 
 void Game::initGameObjects() {
-    camera = new Camera({-3.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, glm::radians(45.0f), float(WINDOW_WIDTH) / WINDOW_HEIGHT);
-    //spheres.push_back(new Sphere({0.0f, 0.0f, 0.0f}));
-    cubes.push_back(new Cube({0.0f, 0.0f, 0.0f}));
+    camera = new Camera({-5.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, glm::radians(90.0f), float(WINDOW_WIDTH) / WINDOW_HEIGHT);
+    spheres.push_back(new Sphere({0.0f, 0.0f, 5.0f}, 1, TEXTURES::EARTH));
+    lightSources.push_back(new LightSource({0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}));
 }
 
 void Game::mainloop() {
     float currentTime = glfwGetTime();
-    float lastTime = glfwGetTime();
+    float lastTime = currentTime;
     while (!glfwWindowShouldClose(window)) {
         currentTime = glfwGetTime();
         deltaTime = currentTime - lastTime;
@@ -80,6 +82,9 @@ void Game::mainloop() {
 
         lightingShader->use();
         camera->update();
+        lightingShader->setVec4("lightColor", lightSources[0]->lightColor);
+        lightingShader->setVec4("lightPos", lightSources[0]->shape->worldCoord);
+        lightingShader->setVec3("viewPos", camera->worldCoord);
         lightingShader->setMat4("viewMatrix", camera->getViewMatrix());
         lightingShader->setMat4("projectionMatrix", camera->getProjectionMatrix());
 
@@ -92,6 +97,15 @@ void Game::mainloop() {
             cube->update();
             lightingShader->setMat4("modelMatrix", cube->modelMatrix);
             cube->render(lightingShader);
+        }
+
+        lightObjectShader->use();
+        lightObjectShader->setMat4("viewMatrix", camera->getViewMatrix());
+        lightObjectShader->setMat4("projectionMatrix", camera->getProjectionMatrix());
+        for (LightSource* lightSource : lightSources) {
+            lightSource->update();
+            lightingShader->setMat4("modelMatrix", lightSource->shape->modelMatrix);
+            lightSource->render(lightObjectShader);
         }
 
         glfwSwapBuffers(window);
