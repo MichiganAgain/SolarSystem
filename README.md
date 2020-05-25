@@ -1,6 +1,6 @@
 # SolarSystem
 
-## Dependancies
+## Dependencies
 glfw, glew and glm
 
 using apt:
