@@ -5,7 +5,7 @@
 #include "cube.hpp"
 #include "textures.hpp"
 
-CubeVertexModel* CubeVertexModel::instance() {
+CubeVertexModel* CubeVertexModel::instance() {		// The singleton design
     static CubeVertexModel ssvm = CubeVertexModel();
     return &ssvm;
 }
@@ -88,7 +88,7 @@ Cube::Cube(glm::vec3 pos, glm::vec3 initialVelocity, float SIZE, float mass, TEX
     velocity = initialVelocity;
     this->SIZE = SIZE;
     this->mass = mass;
-    textureID = Texture::getTexture(t);
+    textureID = Texture::getTexture(t);		//	get the texture id
 
     model = CubeVertexModel::instance();
     initializeNextState();

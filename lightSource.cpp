@@ -12,7 +12,7 @@ LightSource::LightSource(glm::vec3 pos, glm::vec3 intialVelocity, glm::vec4 ligh
 }
 
 void LightSource::update() {
-    shape->update();
+    if (shape) shape->update();
 }
 
 void LightSource::render(Shader* shader) {

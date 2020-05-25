@@ -2,12 +2,17 @@
 
 #include <GL/glew.h>
 #include <unordered_map>
-#include <stb_image.h>
 #include <iostream>
 #include <stdexcept>
 
+#include "resources/stb_image.h"
 #include "textures.hpp"
 
+/*
+	A hash map is used to keep track of textures that have already been loaded.  If the texture requested is found
+	in the hash map then the ID to that texture is returned.  Otherwise the loadTexture() function is called which
+	generates a texture, get the ID and stores that ID in the hash map before finally returning it.
+*/
 unsigned int Texture::getTexture(TEXTURES t) {
     std::unordered_map<TEXTURES, unsigned int>::iterator i;
     if ((i = textureMap.find(t)) != textureMap.end()) return i->second;
@@ -27,7 +32,7 @@ unsigned int Texture::loadTexture(TEXTURES t) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    stbi_set_flip_vertically_on_load(true);
+    stbi_set_flip_vertically_on_load(true);		//	As OpenGL expects the top left image coord to be (0, 1)
     int width, height, channelsInFile;
     unsigned char* data;
     

@@ -6,6 +6,8 @@
 
 #include "camera.hpp"
 
+
+		//	Camera currently uses Euler angles
 Camera::Camera(glm::vec3 pos, glm::vec3 orientation, float fov, float ar) {
     worldCoord = pos;
     roll = orientation.x;

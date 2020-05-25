@@ -16,6 +16,7 @@ void Physics::gravitationalPull(std::vector<Shape*> shapes) {
             float distance = std::sqrt(std::pow(xDiff, 2) + std::pow(yDiff, 2) + std::pow(zDiff, 2));
             glm::vec3 differences = glm::normalize(glm::vec3(xDiff, yDiff, zDiff));
 
+				// Not the real equation as squaring the distance had too little effect to be interesting when the range increased
             float gravitationalForce = (GRAVITATIONAL_CONSTANT * shapes[i]->mass * shapes[n]->mass) / std::pow(distance, 1);
             shapes[i]->nextState->velocity.x -= differences.x * gravitationalForce / shapes[i]->mass;
             shapes[i]->nextState->velocity.y -= differences.y * gravitationalForce / shapes[i]->mass;

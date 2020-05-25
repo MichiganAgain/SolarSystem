@@ -27,7 +27,7 @@ void Shape::update() {
 
 void Shape::initializeNextState() {
     nextState = new ShapeState();
-    nextState->velocity = velocity;
-    nextState->SIZE = SIZE;
+    nextState->velocity = velocity;	//	set velocity to the shapes current velocity as when applying the physics, the velocity is added / subtracted to
+    nextState->SIZE = SIZE;			//	and then this velocity is added onto the shapes world coord
     nextState->mass = mass;
 }

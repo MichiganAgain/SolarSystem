@@ -6,7 +6,8 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xPos, double yPos);
 void scroll_callback(GLFWwindow* window, double xOffset, double yOffset);
-Game* gamePointer;
+Game* gamePointer;	// as opengl can't have callback functions as member functions, use pointer to
+					// hold game instance and call the game object's respective callback
 
 int main() {
     Game game;
