@@ -52,17 +52,27 @@ void Camera::handleScroll(float xOffset, float yOffset, float deltaTime) {
     else if (fieldOfView < minZoom) fieldOfView = minZoom;
 }
 
-void Camera::handleKeyboard(int KEY, float deltaTime) {
-    if (KEY == GLFW_KEY_W) worldCoord += cameraFrontDirection * movementSpeed * deltaTime;
-    if (KEY == GLFW_KEY_S) worldCoord -= cameraFrontDirection * movementSpeed * deltaTime;
-    if (KEY == GLFW_KEY_A) worldCoord -= glm::normalize(glm::cross(cameraFrontDirection, cameraUp)) * movementSpeed * deltaTime;
-    if (KEY == GLFW_KEY_D) worldCoord += glm::normalize(glm::cross(cameraFrontDirection, cameraUp)) * movementSpeed * deltaTime;
-    if (KEY == GLFW_KEY_SPACE) worldCoord += cameraUp * movementSpeed * deltaTime;
-    if (KEY == GLFW_KEY_LEFT_CONTROL) worldCoord -= cameraUp * movementSpeed * deltaTime;
-}
-
 void Camera::updateCameraAspectRatio(float ar) {
     this->aspectRatio = ar;
+}
+
+void Camera::moveForward(float deltaTime) {
+    worldCoord += cameraFrontDirection * movementSpeed * deltaTime;
+}
+void Camera::moveBackwards(float deltaTime) {
+    worldCoord -= cameraFrontDirection * movementSpeed * deltaTime;
+}
+void Camera::moveLeft(float deltaTime) {
+    worldCoord -= glm::normalize(glm::cross(cameraFrontDirection, cameraUp)) * movementSpeed * deltaTime;
+}
+void Camera::moveRight(float deltaTime) {
+    worldCoord += glm::normalize(glm::cross(cameraFrontDirection, cameraUp)) * movementSpeed * deltaTime;
+}
+void Camera::moveUp(float deltaTime) {
+    worldCoord += cameraUp * movementSpeed * deltaTime;
+}
+void Camera::moveDown(float deltaTime) {
+    worldCoord -= cameraUp * movementSpeed * deltaTime;
 }
 
 glm::mat4& Camera::getViewMatrix() { return viewMatrix; }

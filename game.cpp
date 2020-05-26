@@ -139,12 +139,12 @@ void Game::mainloop() {
 
 void Game::processInput(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) glfwSetWindowShouldClose(window, GLFW_TRUE);
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camera->handleKeyboard(GLFW_KEY_W, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) camera->handleKeyboard(GLFW_KEY_S, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) camera->handleKeyboard(GLFW_KEY_A, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) camera->handleKeyboard(GLFW_KEY_D, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) camera->handleKeyboard(GLFW_KEY_SPACE, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) camera->handleKeyboard(GLFW_KEY_LEFT_CONTROL, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camera->moveForward(deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) camera->moveBackwards(deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) camera->moveLeft(deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) camera->moveRight(deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) camera->moveUp(deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) camera->moveDown(deltaTime);
 }
 
 void Game::cleanup() {

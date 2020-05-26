@@ -9,8 +9,13 @@ class Camera {
         void update();
         void handleMouse(float xPos, float yPos, float deltaTime);
         void handleScroll(float xOffset, float yOffset, float deltaTime);
-        void handleKeyboard(int KEY, float deltaTime);
         void updateCameraAspectRatio(float ar);
+        void moveForward(float deltaTime);
+        void moveBackwards(float deltaTime);
+        void moveLeft(float deltaTime);
+        void moveRight(float deltaTime);
+        void moveUp(float deltaTime);
+        void moveDown(float deltaTime);
         glm::mat4& getViewMatrix();
         glm::mat4& getProjectionMatrix();
         
@@ -30,9 +35,9 @@ class Camera {
         float roll, pitch, yaw;
         float lastXPos = 0, lastYPos = 0;
         float minZoom = 0.01f;
-        float maxZoom = 90.0f;
-        float lookSensitivity = 0.01f;
-        float zoomSensitivity = 0.05f;
+        float maxZoom = glm::radians(90.0f);
+        float lookSensitivity = 0.07f;
+        float zoomSensitivity = 2.0f;
         float movementSpeed = 200;
 };
 

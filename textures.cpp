@@ -1,11 +1,11 @@
 #define STB_IMAGE_IMPLEMENTATION
 
 #include <GL/glew.h>
+#include <stb/stb_image.h>
 #include <unordered_map>
 #include <iostream>
 #include <stdexcept>
 
-#include "resources/stb_image.h"
 #include "textures.hpp"
 
 /*
