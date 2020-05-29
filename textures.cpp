@@ -81,6 +81,10 @@ unsigned int Texture::loadTexture(TEXTURES t) {
             data = stbi_load("resources/textures/neptune.jpg", &width, &height, &channelsInFile, 0);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
             break;
+        case TEXTURES::STAR:
+            data = stbi_load("resources/textures/star.jpeg", &width, &height, &channelsInFile, 0);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            break;
         default:
             throw std::runtime_error("Failed to find texture");
     }

@@ -70,13 +70,14 @@ void Game::initGameObjects() {
     camera = new Camera({0.0f, 400.0f, 0.0f}, {0.0f, glm::radians(-90.0f), 0.0f}, glm::radians(90.0f), float(WINDOW_WIDTH) / WINDOW_HEIGHT);
     shapes.push_back(new Sphere({0.0f, 0.0f, 150.0f}, {0.7f, 0.0f, 0.0f}, 0.24397f, 10.0f, TEXTURES::MERCURY));
     shapes.push_back(new Sphere({0.0f, 0.0f, 170.0f}, {0.7f, 0.0f, 0.0f}, 0.60518f, 10.0f, TEXTURES::VENUS));	// fill shape vector with shapes
-    shapes.push_back(new Sphere({0.0f, 0.0f, 190.0f}, {0.7f, 0.0f, 0.0f}, 0.6371f, 100.0f, TEXTURES::EARTH));	// can contain any shape that inherits the Shape class
+    shapes.push_back(new Sphere({0.0f, 0.0f, 190.0f}, {0.7f, 0.0f, 0.0f}, 0.6371f, 10.0f, TEXTURES::EARTH));	// can contain any shape that inherits the Shape class
     shapes.push_back(new Sphere({0.0f, 2.0f, 190.0f}, {0.7f, 0.0f, 0.0f}, 0.17375f, 10.0f, TEXTURES::MOON));
     shapes.push_back(new Sphere({0.0f, 0.0f, 210.0f}, {0.7f, 0.0f, 0.0f}, 0.33895f, 10.0f, TEXTURES::MARS));
     shapes.push_back(new Sphere({0.0f, 0.0f, 260.0f}, {0.7f, 0.0f, 0.0f}, 6.9911f, 10.0f, TEXTURES::JUPITER));
     shapes.push_back(new Sphere({0.0f, 0.0f, 300.0f}, {0.7f, 0.0f, 0.0f}, 5.8232f, 10.0f, TEXTURES::SATURN));
     shapes.push_back(new Sphere({0.0f, 0.0f, 330.0f}, {0.7f, 0.0f, 0.0f}, 2.5362f, 10.0f, TEXTURES::URANUS));
     shapes.push_back(new Sphere({0.0f, 0.0f, 360.0f}, {0.7f, 0.0f, 0.0f}, 2.4622f, 10.0f, TEXTURES::NEPTUNE));
+    shapeTextures.push_back(new Sphere({0.0f, 0.0f, 100.0f}, {0.0f, 0.0f, 0.0f}, 100000.0f, 0.0f, TEXTURES::STAR));
     
     lightSources.push_back(new LightSource({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, 69.5508f, 10000.0f));
     
@@ -100,7 +101,7 @@ void Game::mainloop() {
         deltaTime = currentTime - lastTime;		// delta time is how much time has passed since the last frame
         lastTime = currentTime;					// it is used to make sure that movement is time dependant, not how many frames have passed
 												// calculated by the current time - time taken for the last frame (in the first frame the delta time will be 0)
-        glClearColor(0.1875f, 0.1875f, 0.1875f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         processInput(window);
@@ -130,6 +131,13 @@ void Game::mainloop() {
             lightSource->update();
             lightingShader->setMat4("modelMatrix", lightSource->shape->modelMatrix);
             lightSource->render(lightObjectShader);
+        }
+        for (Shape* shape : shapeTextures) {
+            if (!shape->lightSource) {
+                shape->update();
+                lightingShader->setMat4("modelMatrix", shape->modelMatrix);
+                shape->render(lightingShader);
+            }
         }
 
         glfwSwapBuffers(window);

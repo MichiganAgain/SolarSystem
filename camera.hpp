@@ -30,7 +30,7 @@ class Camera {
         float fieldOfView;
         float aspectRatio;
         float minFrustum = 0.01f;
-        float maxFrustum = 10000.0f;	// For the projection matrix
+        float maxFrustum = 1000000.0f;	// For the projection matrix
 
         float roll, pitch, yaw;
         float lastXPos = 0, lastYPos = 0;

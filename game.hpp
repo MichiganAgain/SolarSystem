@@ -36,6 +36,7 @@ private:
     
     Camera* camera;
     std::vector<Shape*> shapes;
+    std::vector<Shape*> shapeTextures;
     std::vector<LightSource*> lightSources;
 };
 
